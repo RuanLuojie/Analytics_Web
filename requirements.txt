@@ -1,0 +1,5 @@
+flask
+pandas==0.24.2
+requests
+xlrd==1.2.0
+Flask-Cors==3.0.10

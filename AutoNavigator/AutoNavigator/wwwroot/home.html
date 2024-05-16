@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>硬體需求選擇</title>
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dropdown-container">
+            <div class="dropdown">
+                <label for="cpu">CPU 主要需求:</label>
+                <select id="cpu" name="cpu"><option value="choose">請選擇</option></select>
+            </div>
+
+            <div class="dropdown">
+                <label for="gpu">GPU 次要需求:</label>
+                <select id="gpu" name="gpu"><option value="choose">請選擇</option></select>
+            </div>
+
+            <div class="dropdown">
+                <label for="ram">RAM 多工處理:</label>
+                <select id="ram" name="ram"><option value="choose">請選擇</option></select>
+            </div>
+
+            <div class="dropdown">
+                <label for="hdd">HDD/SSD 儲存需求:</label>
+                <select id="hdd" name="hdd"><option value="choose">請選擇</option></select>
+            </div>
+        </div>
+
+        <div class="result-container">
+            <div class="result-label">結果</div>
+            <div class="result-box" id="result"></div>
+        </div>
+
+        <div class="error-container">
+            <div class="error-message" id="error-message" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script src="js/home.js"></script>
+</body>
+</html>
