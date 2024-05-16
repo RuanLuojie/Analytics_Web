@@ -27,7 +27,7 @@
 1. 克隆此倉庫：
 
 ```bash
-git clone https://github.com/你的用戶名/你的倉庫名.git
+git clone [https://github.com/你的用戶名/你的倉庫名.git](https://github.com/RuanLuojie/Analytics_Web.git)
 cd 你的倉庫名
 ```
 
@@ -65,33 +65,7 @@ EXCEL_URL = 'https://cdn.glitch.global/717c90c6-39f6-46fc-b43d-b44ee8bb0dbb/123.
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
-@app.route('/api/options', methods=['GET'])
-def get_options():
-    response = requests.get(EXCEL_URL)
-    file = BytesIO(response.content)
-
-    try:
-        df = pd.read_excel(file, engine='xlrd')
-        df.columns = df.columns.str.strip()
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-    try:
-        options = {
-            'cpu': df['CPU'].dropna().unique().tolist(),
-            'gpu': df['GPU'].dropna().unique().tolist(),
-            'ram': df['RAM'].dropna().unique().tolist(),
-            'hdd': df['HDD/SSD'].dropna().unique().tolist()
-        }
-    except KeyError as e:
-        return jsonify({"error": "KeyError: " + str(e)}), 500
-
-    return jsonify(options)
-
-if __name__ == '__main__':
-    app.run()
+.....
 ```
 
 ### templates/index.html
@@ -107,40 +81,8 @@ if __name__ == '__main__':
 <body>
     <div class="alert" id="alert" style="display: none;">
         伺服器未連線請重新整理網頁
-    </div>
 
-    <div class="container">
-        <div class="dropdown-container">
-            <div class="dropdown">
-                <label for="cpu">CPU 主要需求:</label>
-                <select id="cpu" name="cpu"><option value="choose">請選擇</option></select>
-            </div>
-
-            <div class="dropdown">
-                <label for="gpu">GPU 次要需求:</label>
-                <select id="gpu" name="gpu"><option value="choose">請選擇</option></select>
-            </div>
-
-            <div class="dropdown">
-                <label for="ram">RAM 多工處理:</label>
-                <select id="ram" name="ram"><option value="choose">請選擇</option></select>
-            </div>
-
-            <div class="dropdown">
-                <label for="hdd">HDD/SSD 儲存需求:</label>
-                <select id="hdd" name="hdd"><option value="choose">請選擇</option></select>
-            </div>
-        </div>
-
-        <div class="result-container">
-            <div class="result-label">結果</div>
-            <div class="result-box" id="result"></div>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+.....
 ```
 
 ### static/styles.css
@@ -166,55 +108,7 @@ if __name__ == '__main__':
     align-items: center;
     padding: 20px;
 }
-
-.dropdown-container {
-    display: flex;
-    justify-content: space-around;
-    width: 80%;
-    border: 2px solid black;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.dropdown {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-select {
-    padding: 5px;
-    font-size: 16px;
-    width: 200px;
-    border: 2px solid black;
-}
-
-.result-container {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.result-label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.result-box {
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 2px solid black;
-    width: 500px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-}
+....
 ```
 
 ### static/script.js
@@ -237,68 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             populateSelect('ram', data.ram);
             populateSelect('hdd', data.hdd);
         })
-        .catch(error => {
-            console.error('Error fetching options:', error);
-            showError('伺服器未連線請重新整理網頁');
-        });
-
-    // 监听选择变化事件并显示结果
-    const selects = document.querySelectorAll('select');
-    selects.forEach(select => {
-        select.addEventListener('change', showResult);
-    });
-
-    // 填充下拉菜单的函数
-    function populateSelect(id, options) {
-        const select = document.getElementById(id);
-        optionsMap[id] = {};
-
-        options.forEach(option => {
-            const parts = option.split(':');
-            const displayText = parts[0];
-            const valueText = parts.length > 1 ? parts[1] : parts[0];
-            
-            // 将前缀与完整值映射到 optionsMap 中
-            optionsMap[id][displayText] = valueText;
-
-            const opt = document.createElement('option');
-            opt.value = displayText;
-            opt.textContent = displayText;
-            select.appendChild(opt);
-        });
-    }
-
-    // 显示结果的函数
-    function showResult() {
-        const cpu = document.getElementById("cpu").value;
-        const gpu = document.getElementById("gpu").value;
-        const ram = document.getElementById("ram").value;
-        const hdd = document.getElementById("hdd").value;
-
-        // 获取映射后的完整值
-        const cpuValue = cpu !== "choose" ? `CPU: ${optionsMap["cpu"][cpu]}` : null;
-        const gpuValue = gpu !== "choose" ? `GPU: ${optionsMap["gpu"][gpu]}` : null;
-        const ramValue = ram !== "choose" ? `RAM: ${optionsMap["ram"][ram]}` : null;
-        const hddValue = hdd !== "choose" ? `HDD/SSD: ${optionsMap["hdd"][hdd]}` : null;
-
-        // 创建结果数组
-        let resultArray = [cpuValue, gpuValue, ramValue, hddValue].filter(value => value !== null);
-
-        // 生成结果文本
-        let resultText = `選擇的硬體需求為: ${resultArray.join(',
-
- ')}`;
-        
-        document.getElementById("result").innerText = resultText;
-    }
-
-    // 显示错误消息的函数
-    function showError(message) {
-        const alert = document.getElementById('alert');
-        alert.textContent = message;
-        alert.style.display = 'block';
-    }
-});
+...
 ```
 
 ## 注意事項
