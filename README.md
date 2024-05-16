@@ -27,7 +27,7 @@
 1. 克隆此倉庫：
 
 ```bash
-git clone [https://github.com/你的用戶名/你的倉庫名.git](https://github.com/RuanLuojie/Analytics_Web.git)
+git clone (https://github.com/RuanLuojie/Analytics_Web.git)
 cd 你的倉庫名
 ```
 
